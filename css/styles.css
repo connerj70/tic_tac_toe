@@ -1,0 +1,28 @@
+.board-container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 600px;
+    height: 600px;
+    background: orange;
+}
+
+.square {
+    box-sizing: border-box;
+    width: 200px;
+    height: 200px;
+    border: 1px solid green;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;;
+}
+
+.x {
+    font-weight: bolder;
+    font-size: 75px;
+}
+
+.o {
+    font-weight: bolder;
+    font-size: 75px;
+}
