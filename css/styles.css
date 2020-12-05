@@ -55,4 +55,5 @@ body {
     background-image: url("space.jpg");
     background-color: #000;
     color: white;
+    font-family: 'JetBrains Mono', monospace;
 }
