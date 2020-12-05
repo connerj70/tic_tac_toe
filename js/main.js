@@ -1,4 +1,25 @@
+let player1 = window.prompt("Please enter player #1's name")
+let player2 = window.prompt("Please enter player #2's name")
+
 var turn = 'O'
+let player1Wins = 0
+let player2Wins = 0
+let tiesNum = 0
+
+let noti = document.getElementById('notification')
+let p1Wins = document.getElementById('1-win')
+let p2Wins = document.getElementById('2-win')
+let ties = document.getElementById('ties')
+
+var happyAudio = new Audio('happy.mp3');
+var sadAudio = new Audio('sad.mp3');
+
+
+p1Wins.innerText = `${player1} wins: ${player1Wins}`
+p2Wins.innerText = `${player2} wins: ${player2Wins}`
+ties.innerText = `${tiesNum}`
+
+noti.innerText = `It's ${player1}'s turn`
 
 function clicked(id) {
 
@@ -19,22 +40,57 @@ function clicked(id) {
     if(turn === 'X') {
         n.classList.add("x")
         n.textContent = 'X'
-        console.log(n)
-        console.log('about to append')
         el.appendChild(n)
         turn = 'O'
+        noti.innerText = `It's ${player1}'s turn`
+
     } else {
         n.classList.add("o")
         n.textContent = 'O'
         el.appendChild(n)
         turn = 'X'
+        noti.innerText = `It's ${player2}'s turn`
     }
 
     let end = checkEnd()
 
     if(end[0]) {
         turn = "END"
-        alert(`congrats to ${end[1]} they won!`)
+        if (end[1] === 'o') {
+            noti.innerText = `congrats to ${player1}, they won!`
+            player1Wins++
+            p1Wins.innerText = `${player1} wins: ${player1Wins}`
+            happyAudio.play();
+
+        } else if (end[1] === 'x') {
+            noti.innerText = `congrats to ${player2}, they won!`
+            player2Wins++
+            p2Wins.innerText = `${player2} wins: ${player2Wins}`
+            happyAudio.play();
+        } else {
+            noti.innerText = `It's a tie!`
+            tiesNum++
+            ties.innerText = `${tiesNum}`
+            sadAudio.play();
+        }
+        playAgainBtn = document.createElement('button')
+        playAgainBtn.innerText = "Play Again?"
+        playAgainBtn.onclick = function() {
+            happyAudio.pause()
+            happyAudio.currentTime = 0
+            sadAudio.pause()
+            sadAudio.currentTime = 0
+            turn = 'o'
+            noti.innerText = `It's ${player1}'s turn`
+            let els = getEls()
+            
+            els.forEach((el) => {
+                if(el.childNodes.length > 0){
+                    el.removeChild(el.childNodes[0])
+                }
+            })
+        }
+        noti.appendChild(playAgainBtn)
     }
 }
 
@@ -62,6 +118,12 @@ function checkEnd() {
     if(endD[0]) {
         return endD
     }
+
+    let tie = checkTie(els)
+    if (tie) {
+        return [true, 'TIE']
+    }
+
     return [false]
 }
 
@@ -72,6 +134,15 @@ function getEls() {
         els.push(el)
     }
     return els
+}
+
+function checkTie(els) {
+    for(var i=0; i < els.length; i++) {
+        if (!els[i].firstChild) {
+            return false
+        }
+    }
+    return true
 }
 
 function checkRows(els) {
